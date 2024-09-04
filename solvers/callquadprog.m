@@ -9,7 +9,7 @@ end
 
 if options.showprogress;showprogress(['Calling ' interfacedata.solver.tag],options.showprogress);end
 solvertime = tic;
-solveroutput = callsolver(model,options);
+solveroutput = callsolver(model,options,interfacedata);
 solvertime = toc(solvertime);
 solution = quadprogsol2yalmipsol(solveroutput,model);
 
@@ -42,7 +42,7 @@ end
 output = createOutputStructure(Primal,Dual,[],problem,infostr,solverinput,solveroutput,solvertime);
 
 
-function solveroutput = callsolver(model,options)
+function solveroutput = callsolver(model,options,interfacedata)
 x = [];
 fmin = [];
 flag = [];
@@ -53,10 +53,10 @@ if nnz(model.Q) == 0
     % cases. To avoid seeing this when we don't want the lambdas anyway, we
     % don't ask for it
     if options.saveduals
-        [x,fmin,flag,output,lambda] = linprog(model.c, model.A, model.b, model.Aeq, model.beq, model.lb, model.ub, model.x0,model.ops);
+        [x,fmin,flag,output,lambda] = linprog(model.c, model.A, model.b, model.Aeq, model.beq, model.lb, model.ub, model.ops);
     else
         lambda = [];
-        [x,fmin,flag,output] = linprog(model.c, model.A, model.b, model.Aeq, model.beq, model.lb, model.ub, model.x0,model.ops);
+        [x,fmin,flag,output] = linprog(model.c, model.A, model.b, model.Aeq, model.beq, model.lb, model.ub, model.ops);
     end
 else
     if options.saveduals
@@ -66,7 +66,7 @@ else
         if options.savesolveroutput
             [x,fmin,flag,output] = quadprog(model.Q, model.c, model.A, model.b, model.Aeq, model.beq, model.lb, model.ub, model.x0,model.ops);
         else
-            [x,fmin,flag] = quadprog(model.Q, model.c, model.A, model.b, model.Aeq, model.beq, model.lb, model.ub, model.x0,model.ops);            
+            [x,fmin,flag] = quadprog(model.Q, model.c, model.A, model.b, model.Aeq, model.beq, model.lb, model.ub, model.x0,model.ops);
         end
     end
     if flag==5

@@ -53,7 +53,7 @@ if options.savedebug
 end
 
 solvertime = tic;
-[x,fmin,flag,output,lambda] = linprog(c, A, b, Aeq, beq, lb, ub, x0,options.linprog);
+[x,fmin,flag,output,lambda] = linprog(c, A, b, Aeq, beq, lb, ub, options.linprog);
 solvertime = toc(solvertime);
 problem = 0;
 
